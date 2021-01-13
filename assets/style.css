@@ -69,3 +69,11 @@ textarea{
   font-size: 20px;
   transition: all .3s ease-in-out;
 }
+
+.event-container {
+  background-color: rgba(134, 134, 134, 0.7);
+}
+
+.event-container:hover {
+  opacity: 1;
+}

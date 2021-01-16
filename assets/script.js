@@ -13,53 +13,61 @@ function displayCurrentDate() {
 displayCurrentDate();
 
 // renders hours of 9a - 5p on the page
-for (var hour = 9; hour < 17; hour++) {
+for (var hour = 9; hour < 18; hour++) {
     var index = hour - 9;
 
-    var rowEl = $("<form>")
-        .attr("id", index)
-        .addClass("row time-block hour");
+    var hourDisplayed = 0;
+    var meridiem = "";
+    if (hour > 12) {
+        visibleHour = hour - 12;
+        meridiem = "pm";
+    } else {
+        visibleHour = hour;
+        meridiem = "am"
+    }
 
+    // adds new row
+    var rowEl = $("<form>")
+        .attr("id", "hour-" + index)
+        .addClass("row time-block hour position-relative");
+
+    // adds hour to each row
     var div2Col = $("<div>")
-        .addClass("col-md-2 p-5");
+        .addClass("col-md-2 position-relative");
     var hourEl = $("<div>")
-        .text(hour);
+        .addClass("position-relative top-50 start-50 translate-middle pt-4")
+        .text(visibleHour + meridiem);  
     div2Col.append(hourEl);
     rowEl.append(div2Col);
-    
+
+    // adds textarea to each row
     var div9Col = $("<div>")
-        .addClass("col-md-9 mb-0 p-0");
+        .addClass("col-md-9 mb-0 position-relative");
     var planEl = $("<textarea>")
         .attr("id", "input-" + index)
-        .addClass("description");
+        .addClass("description position-relative");
+    // dynamically adds .past, .present and .future classes to each hour
+    if (hour < currentHour) {
+        planEl.addClass("past");
+    } else if (hour > currentHour) {
+        planEl.addClass("future");
+    } else {
+        planEl.addClass("present"); 
+    }
     div9Col.append(planEl);
     rowEl.append(div9Col);
 
+    // adds save button to each row
     var div1Col = $("<div>")
         .attr("id", "save-button-" + index)
-        .addClass("col-md-1 btn saveBtn");
+        .addClass("col-md-1 btn saveBtn position-relative");
     var saveIcon = $("<i>")
-        .addClass("fas fa-save fa-lg p-5"); // icon from fontawesome.com
+        .addClass("fas fa-save fa-lg position-relative top-50 start-50 translate-middle pt-4"); // icon from fontawesome.com
     div1Col.append(saveIcon);
     rowEl.append(div1Col);
 
     containerEl.append(rowEl);
 }
-
-// add function(s) to dynamically add .past, .present and .future classes to each hour
-// todaysSchedule.forEach(function(thisTime) {
-//     if (thisTime.time < currentHour) {
-//         $("textarea").addClass("past");
-//     } else if (thisTime.time === currentHour) {
-//         $("textarea").addClass("present");
-//     } else if (thisTime.time > currentHour) {
-//         $("textarea").addClass("future")
-//     }
-//     // console.log(thisTime.time);
-//     // console.log(currentHour);
-// });
-
-
 
 
 
@@ -74,22 +82,6 @@ function saveTodaysSchedule() {
 
 // add function to render task reminders from localStorage
 
-
-
-
-
-// function renderTodaysSchedule(todaysSchedule) {
-//     $(".container").empty();
-
-//     for (var i=0; i < todaysSchedule.length; i++) {
-//         var eachHour = $("<form>");
-//         eachHour.text(todaysSchedule[index]);
-
-//         $(".container").append(eachHour);
-//     }
-// };
-
-// renderTodaysSchedule();
 
 
 

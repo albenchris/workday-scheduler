@@ -4,14 +4,14 @@ body {
   line-height: 1;
 }
 
-textarea,
-input {
+textarea {
   background: transparent;
   border: none;
   resize: none;
   color: #000000;
   border-left: 1px solid black;
   padding: 10px;
+  line-height: 1.3;
   height: 100%;
   width: 100%;
 }
@@ -52,12 +52,12 @@ input {
 
 .present {
   background-color: #ff6961;
-  color: white;
+  color: black; /* changed from white for UI purposes */
 }
 
 .future {
   background-color: #77dd77;
-  color: white;
+  color: black; /* changed from white for UI purposes */
 }
 
 .saveBtn {

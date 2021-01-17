@@ -28,21 +28,30 @@
       <p class="lead">A simple calendar app for scheduling your work day</p>
       <p id="currentDay" class="lead"></p>
     </header>
+
+    <!-- container start -->
     <div class="container">
-      <!-- Timeblocks go here -->
       
-      <form id="hour-8" class="row time-block hour">
-        <div class="col col-2 p-5">
-          <div id="hour">8am</div>
+      <!-- Imaginary Timeblock (cleared out by script.js file) -->
+      <form class="row time-block hour">
+        <div class="col-md-2">
+          <div class="pt-3">
+            8am
+          </div>
         </div>
-        <div class="col col-9 input-group mb-0 p-0">
-          <textarea class="description col-12"></textarea>
+        <div class="col-md-9 mb-0 p-0">
+          <textarea id="textarea-__" class="description">
+            Drink Coffee
+          </textarea>
         </div>
-        <button id="save-button" class="col col-1 btn saveBtn">
+        <button save-id="__" class="col-md-1 btn saveBtn">
           <i class="fas fa-save fa-lg"></i>
-        </button>    
+        </button>
       </form>
-        
+
+    </div>
+    <!-- container end -->
+    
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
     <script src="./assets/script.js"></script>

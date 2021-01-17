@@ -4,7 +4,8 @@ body {
   line-height: 1;
 }
 
-textarea {
+textarea,
+input {
   background: transparent;
   border: none;
   resize: none;

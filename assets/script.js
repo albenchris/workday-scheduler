@@ -1,103 +1,88 @@
-// global variables (start)
-var containerEl = $(".container");
-containerEl.empty();
+// emptying placeholder content
+$(".container").empty();
 
-var todaysSchedule = 
-    JSON.parse(localStorage.getItem("todaysSchedule")) || 
-    ["", "", "", "", "", "", "", ""]
-;
-// global variables (end)
+// get from localStorage or set as array of 9 strings
+let todaysSchedule =
+    JSON.parse(localStorage.getItem("todaysSchedule")) 
+    ||
+    [
+        '', // 0 (9am)
+        '', // 1 (10am)
+        '', // 2 (11am)
+        '', // 3 (12pm)
+        '', // 4 (1pm)
+        '', // 5 (2pm)
+        '', // 6 (3pm)
+        '', // 7 (4pm)
+        ''  // 8 (5pm)
+    ];
 
-// displays current date (start)
-function displayCurrentDate() {
-    var currentDate = moment().format("MMMM Do, YYYY");
-    $("#currentDay").text(currentDate);
-};
+// setting the current date
+$("#currentDay").text(moment().format("MMMM Do, YYYY"));
 
-displayCurrentDate();
-// current date display (end)
+// renders the main page
+for (let hour = 9; hour <= 17; hour++) {
+    // setting the index at 0
+    const index = hour - 9;
 
-// renders hours of 9a - 5p on the page (start)
-function renderMainPage() {
-    for (var hour = 9; hour <= 17; hour++) {
-        // changes the index value to start at 0
-        var index = hour - 9;
-    
-        // changes the hour displayed from military time to standard time
-        var meridiem = "";
-        if (hour > 12) {
-            hourDisplayed = hour - 12;
-            meridiem = "pm";
-        } else if (hour === 12) {
-            hourDisplayed = hour;
-            meridiem = "pm";
-        } else {
-            hourDisplayed = hour;
-            meridiem = "am";
-        }
-    
-        // adds new row
-        var rowEl = $("<form>")
-            .addClass("row time-block hour");
-    
-        // adds hour to each row
-        var div2Col = $("<div>")
-            .addClass("col-md-2");
-        var hourEl = $("<div>")
-            .addClass("pt-3")
-            .text(hourDisplayed + meridiem);  
-        div2Col.append(hourEl);
-        rowEl.append(div2Col);
-    
-        // adds textarea to each row
-        var div9Col = $("<div>")
-            .addClass("col-md-9 mb-0 p-0");
-        var planEl = $("<textarea>")
-            .attr("id", "textarea-" + index)
-            .addClass("description")
-            .val(todaysSchedule[index]); // <- accesses todaysScedule array
-        // dynamically adds .past, .present and .future classes to each hour
-        var currentHour = moment().format("HH");
-        if (hour < currentHour) {
-            planEl.addClass("past");
-        } else if (hour > currentHour) {
-            planEl.addClass("future");
-        } else {
-            planEl.addClass("present"); 
-        }
-        div9Col.append(planEl);
-        rowEl.append(div9Col);
-    
-        // adds save button to each row
-        var div1Col = $("<button>")
-            .attr("save-id", index)
-            .addClass("col-md-1 btn saveBtn");
-        var saveIcon = $("<i>")
-            .addClass("fas fa-save fa-lg"); // icon from fontawesome.com
-        div1Col.append(saveIcon);
-        rowEl.append(div1Col);
-    
-        containerEl.append(rowEl);
-    }
-};
+    // adds new row
+    const rowEl = $("<form>")
+        .addClass("row time-block");
 
-renderMainPage();
-// render main page (end)
+    // setting time displayed in each block
+    let hourDisplayed;
+    if (hour < 12) hourDisplayed = `${hour.toString()} am`;
+    if (hour === 12) hourDisplayed = `${hour.toString()} pm`;
+    if (hour > 12) hourDisplayed = `${JSON.stringify(hour - 12)} pm`;
 
-// save button functionality (start)
-$(".saveBtn").on("click", function(event) {
-    event.preventDefault();
+    // adds hour to each row
+    const hourCol = $("<div>")
+        .addClass("col-md-2 hour");
+    const hourEl = $("<div>")
+        .addClass("pt-3")
+        .text(hourDisplayed);
+    // append to row
+    hourCol.append(hourEl);
+    rowEl.append(hourCol);
 
-    var index = $(this).attr("save-id");
-    var textareaId = "#textarea-" + index;
-    var value = $(textareaId).val();
+    // adds textarea to each row
+    const textCol = $("<div>")
+        .addClass("col-md-9 mb-0 p-0");
+    const textEl = $("<textarea>")
+        .attr("id", `textarea-${index}`)
+        .addClass("description w-100 h-100")
+        .val(todaysSchedule[index]);
+    let currentHour = moment().format("HH");
+    if (hour < currentHour) textEl.addClass("past");
+    if (hour == currentHour) textEl.addClass("present");
+    if (hour > currentHour) textEl.addClass("future");
+    // append to row
+    textCol.append(textEl);
+    rowEl.append(textCol);
+
+    // adds save button to each row
+    const buttonEl = $("<button>")
+        .attr("save-id", index)
+        .addClass("col-md-1 btn saveBtn");
+    const saveIcon = $("<i>")
+        .addClass("fas fa-save fa-lg");
+    // append to row
+    buttonEl.append(saveIcon);
+    rowEl.append(buttonEl);
+
+    $(".container").append(rowEl);
+}
+
+// save button functionality
+$(".saveBtn").on("click", function (e) {
+    e.preventDefault();
+
+    const index = $(this).attr("save-id");
+    const textId = `#textarea-${index}`;
+    let value = $(textId).val();
+    console.log(value);
 
     todaysSchedule[index] = value;
 
-    saveTodaysSchedule();
-});
-
-function saveTodaysSchedule() {
     localStorage.setItem("todaysSchedule", JSON.stringify(todaysSchedule));
-};
-// save button functionality (end)
+});
